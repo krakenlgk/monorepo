@@ -4,9 +4,12 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { AppResolver } from './resolvers/app.resolver';
+import { UserResolver } from './resolvers/user.resolver';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
+    UsersModule,
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
       useFactory: (configService: ConfigService) => ({
@@ -27,6 +30,6 @@ import { AppResolver } from './resolvers/app.resolver';
       inject: [ConfigService],
     }),
   ],
-  providers: [AppResolver],
+  providers: [AppResolver, UserResolver],
 })
 export class GraphqlModule {}
