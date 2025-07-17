@@ -1,6 +1,7 @@
 'use client';
 
 import { useQuery, gql } from '@apollo/client';
+import { formatDateForDisplay, getFullName, getInitials, truncateText } from '@monorepo/shared';
 
 const GET_USERS = gql`
   query GetUsers {
@@ -69,19 +70,35 @@ export default function UserList() {
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
-                  <h3 style={{ margin: '0 0 0.5rem 0', color: '#333' }}>
-                    {user.firstName} {user.lastName}
-                  </h3>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                    <div style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '50%',
+                      backgroundColor: '#0070f3',
+                      color: 'white',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.75rem',
+                      fontWeight: 'bold'
+                    }}>
+                      {getInitials(user.firstName, user.lastName)}
+                    </div>
+                    <h3 style={{ margin: '0', color: '#333' }}>
+                      {getFullName(user.firstName, user.lastName)}
+                    </h3>
+                  </div>
                   <p style={{ margin: '0 0 0.5rem 0', color: '#666' }}>
                     📧 {user.email}
                   </p>
                   {user.bio && (
                     <p style={{ margin: '0 0 0.5rem 0', color: '#555', fontStyle: 'italic' }}>
-                      &ldquo;{user.bio}&rdquo;
+                      &ldquo;{truncateText(user.bio, 100)}&rdquo;
                     </p>
                   )}
                   <p style={{ margin: '0', fontSize: '0.875rem', color: '#888' }}>
-                    Created: {new Date(user.createdAt).toLocaleDateString()}
+                    Created: {formatDateForDisplay(user.createdAt)}
                   </p>
                 </div>
                 <span

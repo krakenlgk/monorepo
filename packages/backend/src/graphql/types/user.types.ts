@@ -1,7 +1,8 @@
 import { ObjectType, Field, ID, InputType } from '@nestjs/graphql';
+import type { User as SharedUser, CreateUserInput as SharedCreateUserInput, UpdateUserInput as SharedUpdateUserInput } from '@monorepo/shared';
 
 @ObjectType()
-export class UserType {
+export class UserType implements SharedUser {
   @Field(() => ID)
   id!: string;
 
@@ -28,7 +29,7 @@ export class UserType {
 }
 
 @InputType()
-export class CreateUserInput {
+export class CreateUserInput implements SharedCreateUserInput {
   @Field()
   email!: string;
 
@@ -43,7 +44,7 @@ export class CreateUserInput {
 }
 
 @InputType()
-export class UpdateUserInput {
+export class UpdateUserInput implements SharedUpdateUserInput {
   @Field({ nullable: true })
   email?: string;
 

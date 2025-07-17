@@ -2,16 +2,33 @@
   "name": "@monorepo/shared",
   "version": "1.0.0",
   "private": true,
-  "description": "Shared utilities and types",
+  "description": "Shared utilities and types for the monorepo",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
+    "clean": "rm -rf dist",
     "lint": "eslint \"src/**/*.ts\" --fix",
     "test": "jest",
     "type-check": "tsc --noEmit"
   },
+  "keywords": [
+    "shared",
+    "utilities",
+    "types",
+    "monorepo"
+  ],
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "jest": "^29.5.0",
+    "typescript": "^5.0.0"
+  }
 }

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
+import { validateCreateUserInput, type CreateUserInput, type ValidationError } from '@monorepo/shared';
 
 const CREATE_USER = gql`
   mutation CreateUser($input: CreateUserInput!) {
@@ -36,12 +37,14 @@ interface CreateUserFormProps {
 }
 
 export default function CreateUserForm({ onUserCreated }: CreateUserFormProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CreateUserInput>({
     email: '',
     firstName: '',
     lastName: '',
     bio: ''
   });
+
+  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
 
   const [createUser, { loading, error }] = useMutation(CREATE_USER, {
     refetchQueries: [{ query: GET_USERS }],
@@ -60,7 +63,11 @@ export default function CreateUserForm({ onUserCreated }: CreateUserFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.email || !formData.firstName || !formData.lastName) {
+    // Validate using shared validation utilities
+    const errors = validateCreateUserInput(formData);
+    setValidationErrors(errors);
+    
+    if (errors.length > 0) {
       return;
     }
 
@@ -75,6 +82,8 @@ export default function CreateUserForm({ onUserCreated }: CreateUserFormProps) {
           }
         }
       });
+      // Clear validation errors on successful submission
+      setValidationErrors([]);
     } catch (err) {
       // Error is handled by Apollo Client and displayed in the UI
     }
@@ -175,6 +184,24 @@ export default function CreateUserForm({ onUserCreated }: CreateUserFormProps) {
             placeholder="Tell us about yourself..."
           />
         </div>
+
+        {validationErrors.length > 0 && (
+          <div style={{ 
+            marginBottom: '1rem', 
+            padding: '0.75rem', 
+            backgroundColor: '#f8d7da', 
+            color: '#721c24', 
+            border: '1px solid #f5c6cb', 
+            borderRadius: '4px' 
+          }}>
+            <strong>Validation Errors:</strong>
+            <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.5rem' }}>
+              {validationErrors.map((error, index) => (
+                <li key={index}>{error.message}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {error && (
           <div style={{ 
