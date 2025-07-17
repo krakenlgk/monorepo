@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import React from 'react'
+import { GraphQLProvider } from '../lib/apollo-provider'
 
 export const metadata: Metadata = {
   title: 'Monorepo Frontend',
@@ -13,7 +14,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <GraphQLProvider>
+          {children}
+        </GraphQLProvider>
+      </body>
     </html>
   )
 }
