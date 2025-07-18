@@ -17,9 +17,11 @@ describe('GraphQL Integration (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
-    
-    userRepository = moduleFixture.get<Repository<User>>(getRepositoryToken(User));
-    
+
+    userRepository = moduleFixture.get<Repository<User>>(
+      getRepositoryToken(User)
+    );
+
     // Clean up database before each test
     await userRepository.clear();
   });
@@ -35,7 +37,7 @@ describe('GraphQL Integration (e2e)', () => {
         query: '{ hello }',
       })
       .expect(200)
-      .expect((res) => {
+      .expect(res => {
         expect(res.body.data.hello).toBe('Hello from GraphQL!');
       });
   });
@@ -47,7 +49,7 @@ describe('GraphQL Integration (e2e)', () => {
         query: '{ version }',
       })
       .expect(200)
-      .expect((res) => {
+      .expect(res => {
         expect(res.body.data.version).toBe('1.0.0');
       });
   });
@@ -59,7 +61,7 @@ describe('GraphQL Integration (e2e)', () => {
         query: '{ __schema { types { name } } }',
       })
       .expect(200)
-      .expect((res) => {
+      .expect(res => {
         expect(res.body.data.__schema.types).toEqual(
           expect.arrayContaining([
             expect.objectContaining({ name: 'Query' }),
@@ -91,15 +93,15 @@ describe('GraphQL Integration (e2e)', () => {
           email: 'test@example.com',
           firstName: 'John',
           lastName: 'Doe',
-          bio: 'Test user bio'
-        }
+          bio: 'Test user bio',
+        },
       };
 
       const response = await request(app.getHttpServer())
         .post('/graphql')
         .send({
           query: createUserMutation,
-          variables
+          variables,
         })
         .expect(200);
 
@@ -108,7 +110,7 @@ describe('GraphQL Integration (e2e)', () => {
         firstName: 'John',
         lastName: 'Doe',
         bio: 'Test user bio',
-        isActive: true
+        isActive: true,
       });
       expect(response.body.data.createUser.id).toBeDefined();
       expect(response.body.data.createUser.createdAt).toBeDefined();
@@ -122,14 +124,14 @@ describe('GraphQL Integration (e2e)', () => {
           email: 'user1@example.com',
           firstName: 'User',
           lastName: 'One',
-          bio: 'First user'
+          bio: 'First user',
         },
         {
           email: 'user2@example.com',
           firstName: 'User',
           lastName: 'Two',
-          bio: 'Second user'
-        }
+          bio: 'Second user',
+        },
       ]);
 
       const usersQuery = `
@@ -156,13 +158,13 @@ describe('GraphQL Integration (e2e)', () => {
           expect.objectContaining({
             email: 'user1@example.com',
             firstName: 'User',
-            lastName: 'One'
+            lastName: 'One',
           }),
           expect.objectContaining({
             email: 'user2@example.com',
             firstName: 'User',
-            lastName: 'Two'
-          })
+            lastName: 'Two',
+          }),
         ])
       );
     });
@@ -172,7 +174,7 @@ describe('GraphQL Integration (e2e)', () => {
         email: 'test@example.com',
         firstName: 'John',
         lastName: 'Doe',
-        bio: 'Test user'
+        bio: 'Test user',
       });
 
       const userQuery = `
@@ -192,7 +194,7 @@ describe('GraphQL Integration (e2e)', () => {
         .post('/graphql')
         .send({
           query: userQuery,
-          variables: { id: user.id }
+          variables: { id: user.id },
         })
         .expect(200);
 
@@ -202,7 +204,7 @@ describe('GraphQL Integration (e2e)', () => {
         firstName: 'John',
         lastName: 'Doe',
         bio: 'Test user',
-        isActive: true
+        isActive: true,
       });
     });
 
@@ -211,7 +213,7 @@ describe('GraphQL Integration (e2e)', () => {
         email: 'test@example.com',
         firstName: 'John',
         lastName: 'Doe',
-        bio: 'Test user'
+        bio: 'Test user',
       });
 
       const userByEmailQuery = `
@@ -231,7 +233,7 @@ describe('GraphQL Integration (e2e)', () => {
         .post('/graphql')
         .send({
           query: userByEmailQuery,
-          variables: { email: 'test@example.com' }
+          variables: { email: 'test@example.com' },
         })
         .expect(200);
 
@@ -240,7 +242,7 @@ describe('GraphQL Integration (e2e)', () => {
         firstName: 'John',
         lastName: 'Doe',
         bio: 'Test user',
-        isActive: true
+        isActive: true,
       });
     });
 
@@ -249,7 +251,7 @@ describe('GraphQL Integration (e2e)', () => {
         email: 'test@example.com',
         firstName: 'John',
         lastName: 'Doe',
-        bio: 'Original bio'
+        bio: 'Original bio',
       });
 
       const updateUserMutation = `
@@ -270,15 +272,15 @@ describe('GraphQL Integration (e2e)', () => {
         input: {
           firstName: 'Jane',
           lastName: 'Smith',
-          bio: 'Updated bio'
-        }
+          bio: 'Updated bio',
+        },
       };
 
       const response = await request(app.getHttpServer())
         .post('/graphql')
         .send({
           query: updateUserMutation,
-          variables
+          variables,
         })
         .expect(200);
 
@@ -288,7 +290,7 @@ describe('GraphQL Integration (e2e)', () => {
         firstName: 'Jane',
         lastName: 'Smith',
         bio: 'Updated bio',
-        isActive: true
+        isActive: true,
       });
     });
 
@@ -297,7 +299,7 @@ describe('GraphQL Integration (e2e)', () => {
         email: 'test@example.com',
         firstName: 'John',
         lastName: 'Doe',
-        bio: 'Test user'
+        bio: 'Test user',
       });
 
       const deleteUserMutation = `
@@ -310,14 +312,16 @@ describe('GraphQL Integration (e2e)', () => {
         .post('/graphql')
         .send({
           query: deleteUserMutation,
-          variables: { id: user.id }
+          variables: { id: user.id },
         })
         .expect(200);
 
       expect(response.body.data.deleteUser).toBe(true);
 
       // Verify user is deleted
-      const deletedUser = await userRepository.findOne({ where: { id: user.id } });
+      const deletedUser = await userRepository.findOne({
+        where: { id: user.id },
+      });
       expect(deletedUser).toBeNull();
     });
 
@@ -335,7 +339,7 @@ describe('GraphQL Integration (e2e)', () => {
         .post('/graphql')
         .send({
           query: userQuery,
-          variables: { id: '123e4567-e89b-12d3-a456-426614174000' }
+          variables: { id: '123e4567-e89b-12d3-a456-426614174000' },
         })
         .expect(200);
 

@@ -18,7 +18,10 @@ describe('GraphQL Setup', () => {
       imports: [
         GraphQLModule.forRoot<ApolloDriverConfig>({
           driver: ApolloDriver,
-          autoSchemaFile: join(process.cwd(), 'packages/backend/src/test-schema.gql'),
+          autoSchemaFile: join(
+            process.cwd(),
+            'packages/backend/src/test-schema.gql'
+          ),
           sortSchema: true,
         }),
       ],

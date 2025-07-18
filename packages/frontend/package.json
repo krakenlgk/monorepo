@@ -7,8 +7,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "start:prod": "NODE_ENV=production next start",
+    "lint": "next lint --fix",
+    "lint:check": "next lint",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf .next out",
+    "export": "next export",
+    "analyze": "ANALYZE=true npm run build",
+    "prebuild": "npm run type-check"
   },
   "dependencies": {
     "@monorepo/shared": "*",

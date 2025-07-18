@@ -7,7 +7,7 @@ import { UsersService } from './users/users.service';
 export class AppService {
   constructor(
     @InjectDataSource() private dataSource: DataSource,
-    private usersService: UsersService,
+    private usersService: UsersService
   ) {}
 
   getHello(): string {
@@ -24,10 +24,10 @@ export class AppService {
     try {
       // Test database connection
       await this.dataSource.query('SELECT 1');
-      
+
       // Test User entity table exists
       const userCount = await this.usersService.count();
-      
+
       return {
         ...baseHealth,
         database: {
@@ -47,7 +47,8 @@ export class AppService {
         status: 'degraded',
         database: {
           status: 'disconnected',
-          error: error instanceof Error ? error.message : 'Unknown database error',
+          error:
+            error instanceof Error ? error.message : 'Unknown database error',
         },
       };
     }
@@ -65,7 +66,7 @@ export class AppService {
 
       // Test finding the user
       const foundUser = await this.usersService.findByEmail('test@example.com');
-      
+
       // Clean up - remove the test user
       if (foundUser) {
         await this.usersService.remove(foundUser.id);

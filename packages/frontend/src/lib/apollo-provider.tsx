@@ -9,9 +9,5 @@ interface GraphQLProviderProps {
 }
 
 export function GraphQLProvider({ children }: GraphQLProviderProps) {
-  return (
-    <ApolloProvider client={apolloClient}>
-      {children}
-    </ApolloProvider>
-  );
+  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
 }

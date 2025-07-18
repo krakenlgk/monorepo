@@ -2,22 +2,29 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
-import { validateCreateUserInput, validateUpdateUserInput } from '@monorepo/shared';
+import {
+  validateCreateUserInput,
+  validateUpdateUserInput,
+  CreateUserInput,
+  UpdateUserInput,
+} from '@monorepo/shared';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private usersRepository: Repository<User>
   ) {}
 
   async create(userData: Partial<User>): Promise<User> {
     // Validate input using shared validation
-    const validationErrors = validateCreateUserInput(userData as any);
+    const validationErrors = validateCreateUserInput(
+      userData as CreateUserInput
+    );
     if (validationErrors.length > 0) {
       throw new BadRequestException({
         message: 'Validation failed',
-        errors: validationErrors
+        errors: validationErrors,
       });
     }
 
@@ -39,11 +46,13 @@ export class UsersService {
 
   async update(id: string, userData: Partial<User>): Promise<User | null> {
     // Validate input using shared validation
-    const validationErrors = validateUpdateUserInput(userData as any);
+    const validationErrors = validateUpdateUserInput(
+      userData as UpdateUserInput
+    );
     if (validationErrors.length > 0) {
       throw new BadRequestException({
         message: 'Validation failed',
-        errors: validationErrors
+        errors: validationErrors,
       });
     }
 

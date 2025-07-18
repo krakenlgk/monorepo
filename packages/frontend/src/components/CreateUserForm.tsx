@@ -2,7 +2,11 @@
 
 import React, { useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
-import { validateCreateUserInput, type CreateUserInput, type ValidationError } from '@monorepo/shared';
+import {
+  validateCreateUserInput,
+  type CreateUserInput,
+  type ValidationError,
+} from '@monorepo/shared';
 
 const CREATE_USER = gql`
   mutation CreateUser($input: CreateUserInput!) {
@@ -41,10 +45,12 @@ export default function CreateUserForm({ onUserCreated }: CreateUserFormProps) {
     email: '',
     firstName: '',
     lastName: '',
-    bio: ''
+    bio: '',
   });
 
-  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
+  const [validationErrors, setValidationErrors] = useState<ValidationError[]>(
+    []
+  );
 
   const [createUser, { loading, error }] = useMutation(CREATE_USER, {
     refetchQueries: [{ query: GET_USERS }],
@@ -54,19 +60,19 @@ export default function CreateUserForm({ onUserCreated }: CreateUserFormProps) {
         email: '',
         firstName: '',
         lastName: '',
-        bio: ''
+        bio: '',
       });
       onUserCreated?.();
-    }
+    },
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate using shared validation utilities
     const errors = validateCreateUserInput(formData);
     setValidationErrors(errors);
-    
+
     if (errors.length > 0) {
       return;
     }
@@ -78,9 +84,9 @@ export default function CreateUserForm({ onUserCreated }: CreateUserFormProps) {
             email: formData.email,
             firstName: formData.firstName,
             lastName: formData.lastName,
-            bio: formData.bio || undefined
-          }
-        }
+            bio: formData.bio || undefined,
+          },
+        },
       });
       // Clear validation errors on successful submission
       setValidationErrors([]);
@@ -89,11 +95,13 @@ export default function CreateUserForm({ onUserCreated }: CreateUserFormProps) {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev: CreateUserInput) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -103,20 +111,20 @@ export default function CreateUserForm({ onUserCreated }: CreateUserFormProps) {
     border: '1px solid #ddd',
     borderRadius: '4px',
     fontSize: '1rem',
-    boxSizing: 'border-box' as const
+    boxSizing: 'border-box' as const,
   };
 
   const labelStyle = {
     display: 'block',
     marginBottom: '0.5rem',
     fontWeight: 'bold',
-    color: '#333'
+    color: '#333',
   };
 
   return (
     <div style={{ marginTop: '2rem' }}>
       <h2>Create New User</h2>
-      
+
       <form onSubmit={handleSubmit} style={{ maxWidth: '500px' }}>
         <div style={{ marginBottom: '1rem' }}>
           <label htmlFor="firstName" style={labelStyle}>
@@ -179,21 +187,23 @@ export default function CreateUserForm({ onUserCreated }: CreateUserFormProps) {
             style={{
               ...inputStyle,
               resize: 'vertical' as const,
-              minHeight: '80px'
+              minHeight: '80px',
             }}
             placeholder="Tell us about yourself..."
           />
         </div>
 
         {validationErrors.length > 0 && (
-          <div style={{ 
-            marginBottom: '1rem', 
-            padding: '0.75rem', 
-            backgroundColor: '#f8d7da', 
-            color: '#721c24', 
-            border: '1px solid #f5c6cb', 
-            borderRadius: '4px' 
-          }}>
+          <div
+            style={{
+              marginBottom: '1rem',
+              padding: '0.75rem',
+              backgroundColor: '#f8d7da',
+              color: '#721c24',
+              border: '1px solid #f5c6cb',
+              borderRadius: '4px',
+            }}
+          >
             <strong>Validation Errors:</strong>
             <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.5rem' }}>
               {validationErrors.map((error, index) => (
@@ -204,21 +214,28 @@ export default function CreateUserForm({ onUserCreated }: CreateUserFormProps) {
         )}
 
         {error && (
-          <div style={{ 
-            marginBottom: '1rem', 
-            padding: '0.75rem', 
-            backgroundColor: '#f8d7da', 
-            color: '#721c24', 
-            border: '1px solid #f5c6cb', 
-            borderRadius: '4px' 
-          }}>
+          <div
+            style={{
+              marginBottom: '1rem',
+              padding: '0.75rem',
+              backgroundColor: '#f8d7da',
+              color: '#721c24',
+              border: '1px solid #f5c6cb',
+              borderRadius: '4px',
+            }}
+          >
             Error creating user: {error.message}
           </div>
         )}
 
         <button
           type="submit"
-          disabled={loading || !formData.email || !formData.firstName || !formData.lastName}
+          disabled={
+            loading ||
+            !formData.email ||
+            !formData.firstName ||
+            !formData.lastName
+          }
           style={{
             padding: '0.75rem 1.5rem',
             backgroundColor: loading ? '#ccc' : '#28a745',
@@ -227,7 +244,7 @@ export default function CreateUserForm({ onUserCreated }: CreateUserFormProps) {
             borderRadius: '4px',
             fontSize: '1rem',
             cursor: loading ? 'not-allowed' : 'pointer',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
           }}
         >
           {loading ? 'Creating User...' : 'Create User'}

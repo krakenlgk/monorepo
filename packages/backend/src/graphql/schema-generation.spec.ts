@@ -20,7 +20,10 @@ describe('GraphQL Schema Generation', () => {
       imports: [
         GraphQLModule.forRoot<ApolloDriverConfig>({
           driver: ApolloDriver,
-          autoSchemaFile: join(process.cwd(), 'packages/backend/src/test-schema.gql'),
+          autoSchemaFile: join(
+            process.cwd(),
+            'packages/backend/src/test-schema.gql'
+          ),
           sortSchema: true,
         }),
       ],
@@ -39,7 +42,10 @@ describe('GraphQL Schema Generation', () => {
 
   afterAll(async () => {
     // Clean up test schema file
-    const schemaPath = join(process.cwd(), 'packages/backend/src/test-schema.gql');
+    const schemaPath = join(
+      process.cwd(),
+      'packages/backend/src/test-schema.gql'
+    );
     if (fs.existsSync(schemaPath)) {
       fs.unlinkSync(schemaPath);
     }
@@ -47,13 +53,16 @@ describe('GraphQL Schema Generation', () => {
   });
 
   it('should generate GraphQL schema file', async () => {
-    const schemaPath = join(process.cwd(), 'packages/backend/src/test-schema.gql');
-    
+    const schemaPath = join(
+      process.cwd(),
+      'packages/backend/src/test-schema.gql'
+    );
+
     // Wait a bit for schema generation
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     expect(fs.existsSync(schemaPath)).toBe(true);
-    
+
     const schemaContent = fs.readFileSync(schemaPath, 'utf8');
     expect(schemaContent).toContain('type Query');
     expect(schemaContent).toContain('hello: String!');

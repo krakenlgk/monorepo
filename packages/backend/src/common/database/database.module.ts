@@ -7,9 +7,11 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
   imports: [
     TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigService): TypeOrmModuleOptions => {
-        const isDevelopment = configService.get('NODE_ENV', 'development') === 'development';
-        const isProduction = configService.get('NODE_ENV', 'development') === 'production';
-        
+        const isDevelopment =
+          configService.get('NODE_ENV', 'development') === 'development';
+        const isProduction =
+          configService.get('NODE_ENV', 'development') === 'production';
+
         const config: TypeOrmModuleOptions = {
           type: 'postgres',
           host: configService.get('DATABASE_HOST', 'localhost'),
@@ -27,7 +29,11 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
         // If DATABASE_URL is provided, it takes precedence
         const databaseUrl = configService.get<string>('DATABASE_URL');
-        if (databaseUrl && databaseUrl !== 'postgresql://postgres:password@localhost:5432/monorepo_dev') {
+        if (
+          databaseUrl &&
+          databaseUrl !==
+            'postgresql://postgres:password@localhost:5432/monorepo_dev'
+        ) {
           return {
             ...config,
             url: databaseUrl,

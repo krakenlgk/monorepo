@@ -15,7 +15,10 @@ export class ConfigService {
   }
 
   get frontendUrl(): string {
-    return this.configService.get<string>('FRONTEND_URL', 'http://localhost:3000');
+    return this.configService.get<string>(
+      'FRONTEND_URL',
+      'http://localhost:3000'
+    );
   }
 
   get isDevelopment(): boolean {
@@ -28,7 +31,10 @@ export class ConfigService {
 
   // Database configuration getters
   get databaseUrl(): string {
-    return this.configService.get<string>('DATABASE_URL', 'postgresql://postgres:password@localhost:5432/monorepo_dev');
+    return this.configService.get<string>(
+      'DATABASE_URL',
+      'postgresql://postgres:password@localhost:5432/monorepo_dev'
+    );
   }
 
   get databaseHost(): string {
@@ -70,7 +76,11 @@ export class ConfigService {
 
     // If DATABASE_URL is provided, it takes precedence
     const databaseUrl = this.configService.get<string>('DATABASE_URL');
-    if (databaseUrl && databaseUrl !== 'postgresql://postgres:password@localhost:5432/monorepo_dev') {
+    if (
+      databaseUrl &&
+      databaseUrl !==
+        'postgresql://postgres:password@localhost:5432/monorepo_dev'
+    ) {
       return {
         ...config,
         url: databaseUrl,

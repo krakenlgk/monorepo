@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigService } from '@nestjs/config';
+import { Request, Response } from 'express';
 import { join } from 'path';
 import { AppResolver } from './resolvers/app.resolver';
 import { UserResolver } from './resolvers/user.resolver';
@@ -17,8 +18,12 @@ import { UsersModule } from '../users/users.module';
         sortSchema: true,
         playground: configService.get('NODE_ENV') === 'development',
         introspection: true,
-        context: ({ req, res }: { req: any; res: any }) => ({ req, res }),
-        formatError: (error) => {
+        context: ({ req, res }: { req: Request; res: Response }) => ({
+          req,
+          res,
+        }),
+        formatError: error => {
+          // eslint-disable-next-line no-console
           console.error('GraphQL Error:', error);
           return {
             message: error.message,

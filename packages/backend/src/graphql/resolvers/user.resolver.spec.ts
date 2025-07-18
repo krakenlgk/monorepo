@@ -122,7 +122,10 @@ describe('UserResolver', () => {
       const result = await resolver.updateUser(mockUser.id, updateUserInput);
 
       expect(result).toEqual(updatedUser);
-      expect(usersService.update).toHaveBeenCalledWith(mockUser.id, updateUserInput);
+      expect(usersService.update).toHaveBeenCalledWith(
+        mockUser.id,
+        updateUserInput
+      );
     });
   });
 

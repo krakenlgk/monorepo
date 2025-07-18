@@ -20,13 +20,29 @@ module.exports = {
     'prefer-const': 'error',
     'no-var': 'error',
     'no-console': 'warn',
+    'no-prototype-builtins': 'error',
+    '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/no-empty-function': 'warn',
   },
   overrides: [
     {
-      files: ['**/*.ts', '**/*.tsx'],
+      files: ['**/*.spec.ts', '**/*.test.ts', '**/test/**/*.ts'],
+      env: {
+        jest: true,
+      },
       rules: {
-        '@typescript-eslint/no-explicit-any': 'warn',
-        '@typescript-eslint/no-empty-function': 'warn',
+        '@typescript-eslint/no-explicit-any': 'off',
+        'no-console': 'off',
+        'no-undef': 'off',
+      },
+    },
+    {
+      files: ['**/*.js', '**/*.jsx'],
+      env: {
+        node: true,
+      },
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off',
       },
     },
   ],
@@ -36,5 +52,6 @@ module.exports = {
     'build/',
     '.next/',
     '*.config.js',
+    '.eslintrc.js',
   ],
 };

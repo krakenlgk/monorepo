@@ -8,4 +8,5 @@ module.exports = {
     // Next.js specific rules
     '@next/next/no-html-link-for-pages': 'off',
   },
-}
+  ignorePatterns: ['.eslintrc.js'],
+};

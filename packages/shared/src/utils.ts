@@ -1,6 +1,10 @@
 // Shared utility functions
 
-import type { ValidationError, CreateUserInput, UpdateUserInput } from './types';
+import type {
+  ValidationError,
+  CreateUserInput,
+  UpdateUserInput,
+} from './types';
 
 /**
  * Date formatting utilities
@@ -14,7 +18,7 @@ export const formatDateForDisplay = (date: Date | string): string => {
   return dateObj.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   });
 };
 
@@ -25,7 +29,7 @@ export const formatDateTimeForDisplay = (date: Date | string): string => {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   });
 };
 
@@ -52,45 +56,82 @@ export const isValidName = (name: string): boolean => {
   return name.trim().length >= 2 && name.trim().length <= 50;
 };
 
-export const validateCreateUserInput = (input: CreateUserInput): ValidationError[] => {
+export const validateCreateUserInput = (
+  input: CreateUserInput
+): ValidationError[] => {
   const errors: ValidationError[] = [];
 
   if (!input.email || !isValidEmail(input.email)) {
-    errors.push({ field: 'email', message: 'Please enter a valid email address' });
+    errors.push({
+      field: 'email',
+      message: 'Please enter a valid email address',
+    });
   }
 
   if (!input.firstName || !isValidName(input.firstName)) {
-    errors.push({ field: 'firstName', message: 'First name must be between 2 and 50 characters' });
+    errors.push({
+      field: 'firstName',
+      message: 'First name must be between 2 and 50 characters',
+    });
   }
 
   if (!input.lastName || !isValidName(input.lastName)) {
-    errors.push({ field: 'lastName', message: 'Last name must be between 2 and 50 characters' });
+    errors.push({
+      field: 'lastName',
+      message: 'Last name must be between 2 and 50 characters',
+    });
   }
 
   if (input.bio && input.bio.length > 500) {
-    errors.push({ field: 'bio', message: 'Bio must be less than 500 characters' });
+    errors.push({
+      field: 'bio',
+      message: 'Bio must be less than 500 characters',
+    });
   }
 
   return errors;
 };
 
-export const validateUpdateUserInput = (input: UpdateUserInput): ValidationError[] => {
+export const validateUpdateUserInput = (
+  input: UpdateUserInput
+): ValidationError[] => {
   const errors: ValidationError[] = [];
 
-  if (input.email !== undefined && (!input.email || !isValidEmail(input.email))) {
-    errors.push({ field: 'email', message: 'Please enter a valid email address' });
+  if (
+    input.email !== undefined &&
+    (!input.email || !isValidEmail(input.email))
+  ) {
+    errors.push({
+      field: 'email',
+      message: 'Please enter a valid email address',
+    });
   }
 
-  if (input.firstName !== undefined && (!input.firstName || !isValidName(input.firstName))) {
-    errors.push({ field: 'firstName', message: 'First name must be between 2 and 50 characters' });
+  if (
+    input.firstName !== undefined &&
+    (!input.firstName || !isValidName(input.firstName))
+  ) {
+    errors.push({
+      field: 'firstName',
+      message: 'First name must be between 2 and 50 characters',
+    });
   }
 
-  if (input.lastName !== undefined && (!input.lastName || !isValidName(input.lastName))) {
-    errors.push({ field: 'lastName', message: 'Last name must be between 2 and 50 characters' });
+  if (
+    input.lastName !== undefined &&
+    (!input.lastName || !isValidName(input.lastName))
+  ) {
+    errors.push({
+      field: 'lastName',
+      message: 'Last name must be between 2 and 50 characters',
+    });
   }
 
   if (input.bio !== undefined && input.bio && input.bio.length > 500) {
-    errors.push({ field: 'bio', message: 'Bio must be less than 500 characters' });
+    errors.push({
+      field: 'bio',
+      message: 'Bio must be less than 500 characters',
+    });
   }
 
   return errors;
@@ -119,11 +160,13 @@ export const truncateText = (text: string, maxLength: number): string => {
 /**
  * Object utilities
  */
-export const omitUndefined = <T extends Record<string, any>>(obj: T): Partial<T> => {
+export const omitUndefined = <T extends Record<string, unknown>>(
+  obj: T
+): Partial<T> => {
   const result: Partial<T> = {};
   for (const [key, value] of Object.entries(obj)) {
     if (value !== undefined) {
-      result[key as keyof T] = value;
+      (result as Record<string, unknown>)[key] = value;
     }
   }
   return result;
@@ -136,7 +179,7 @@ export const deepClone = <T>(obj: T): T => {
   if (typeof obj === 'object') {
     const clonedObj = {} as T;
     for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
         clonedObj[key] = deepClone(obj[key]);
       }
     }
@@ -148,24 +191,34 @@ export const deepClone = <T>(obj: T): T => {
 /**
  * Array utilities
  */
-export const sortByField = <T>(array: T[], field: keyof T, order: 'ASC' | 'DESC' = 'ASC'): T[] => {
+export const sortByField = <T>(
+  array: T[],
+  field: keyof T,
+  order: 'ASC' | 'DESC' = 'ASC'
+): T[] => {
   return [...array].sort((a, b) => {
     const aVal = a[field];
     const bVal = b[field];
-    
+
     if (aVal < bVal) return order === 'ASC' ? -1 : 1;
     if (aVal > bVal) return order === 'ASC' ? 1 : -1;
     return 0;
   });
 };
 
-export const groupBy = <T, K extends keyof T>(array: T[], key: K): Record<string, T[]> => {
-  return array.reduce((groups, item) => {
-    const groupKey = String(item[key]);
-    if (!groups[groupKey]) {
-      groups[groupKey] = [];
-    }
-    groups[groupKey].push(item);
-    return groups;
-  }, {} as Record<string, T[]>);
+export const groupBy = <T, K extends keyof T>(
+  array: T[],
+  key: K
+): Record<string, T[]> => {
+  return array.reduce(
+    (groups, item) => {
+      const groupKey = String(item[key]);
+      if (!groups[groupKey]) {
+        groups[groupKey] = [];
+      }
+      groups[groupKey].push(item);
+      return groups;
+    },
+    {} as Record<string, T[]>
+  );
 };

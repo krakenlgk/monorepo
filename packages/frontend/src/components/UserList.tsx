@@ -1,7 +1,12 @@
 'use client';
 
 import { useQuery, gql } from '@apollo/client';
-import { formatDateForDisplay, getFullName, getInitials, truncateText } from '@monorepo/shared';
+import {
+  formatDateForDisplay,
+  getFullName,
+  getInitials,
+  truncateText,
+} from '@monorepo/shared';
 
 const GET_USERS = gql`
   query GetUsers {
@@ -31,15 +36,25 @@ export default function UserList() {
   const { loading, error, data, refetch } = useQuery(GET_USERS);
 
   if (loading) return <div>Loading users...</div>;
-  if (error) return <div style={{ color: 'red' }}>Error loading users: {error.message}</div>;
+  if (error)
+    return (
+      <div style={{ color: 'red' }}>Error loading users: {error.message}</div>
+    );
 
   const users: User[] = data?.users || [];
 
   return (
     <div style={{ marginTop: '2rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '1rem',
+        }}
+      >
         <h2>Users ({users.length})</h2>
-        <button 
+        <button
           onClick={() => refetch()}
           style={{
             padding: '0.5rem 1rem',
@@ -47,42 +62,59 @@ export default function UserList() {
             color: 'white',
             border: 'none',
             borderRadius: '4px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           Refresh
         </button>
       </div>
-      
+
       {users.length === 0 ? (
-        <p style={{ color: '#666', fontStyle: 'italic' }}>No users found. Create your first user below!</p>
+        <p style={{ color: '#666', fontStyle: 'italic' }}>
+          No users found. Create your first user below!
+        </p>
       ) : (
         <div style={{ display: 'grid', gap: '1rem' }}>
-          {users.map((user) => (
+          {users.map(user => (
             <div
               key={user.id}
               style={{
                 border: '1px solid #ddd',
                 borderRadius: '8px',
                 padding: '1rem',
-                backgroundColor: '#f9f9f9'
+                backgroundColor: '#f9f9f9',
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                }}
+              >
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                    <div style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '50%',
-                      backgroundColor: '#0070f3',
-                      color: 'white',
+                  <div
+                    style={{
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '0.75rem',
-                      fontWeight: 'bold'
-                    }}>
+                      gap: '0.5rem',
+                      marginBottom: '0.5rem',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '50%',
+                        backgroundColor: '#0070f3',
+                        color: 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '0.75rem',
+                        fontWeight: 'bold',
+                      }}
+                    >
                       {getInitials(user.firstName, user.lastName)}
                     </div>
                     <h3 style={{ margin: '0', color: '#333' }}>
@@ -93,11 +125,19 @@ export default function UserList() {
                     📧 {user.email}
                   </p>
                   {user.bio && (
-                    <p style={{ margin: '0 0 0.5rem 0', color: '#555', fontStyle: 'italic' }}>
+                    <p
+                      style={{
+                        margin: '0 0 0.5rem 0',
+                        color: '#555',
+                        fontStyle: 'italic',
+                      }}
+                    >
                       &ldquo;{truncateText(user.bio, 100)}&rdquo;
                     </p>
                   )}
-                  <p style={{ margin: '0', fontSize: '0.875rem', color: '#888' }}>
+                  <p
+                    style={{ margin: '0', fontSize: '0.875rem', color: '#888' }}
+                  >
                     Created: {formatDateForDisplay(user.createdAt)}
                   </p>
                 </div>
@@ -108,7 +148,7 @@ export default function UserList() {
                     fontSize: '0.75rem',
                     fontWeight: 'bold',
                     backgroundColor: user.isActive ? '#d4edda' : '#f8d7da',
-                    color: user.isActive ? '#155724' : '#721c24'
+                    color: user.isActive ? '#155724' : '#721c24',
                   }}
                 >
                   {user.isActive ? 'Active' : 'Inactive'}

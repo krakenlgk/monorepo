@@ -44,13 +44,13 @@
   ],
   "references": [
     {
-      "path": "./packages/frontend"
+      "path": "./packages/shared"
     },
     {
       "path": "./packages/backend"
     },
     {
-      "path": "./packages/shared"
+      "path": "./packages/frontend"
     }
   ]
 }

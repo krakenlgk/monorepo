@@ -1,5 +1,9 @@
 import { ObjectType, Field, ID, InputType } from '@nestjs/graphql';
-import type { User as SharedUser, CreateUserInput as SharedCreateUserInput, UpdateUserInput as SharedUpdateUserInput } from '@monorepo/shared';
+import type {
+  User as SharedUser,
+  CreateUserInput as SharedCreateUserInput,
+  UpdateUserInput as SharedUpdateUserInput,
+} from '@monorepo/shared';
 
 @ObjectType()
 export class UserType implements SharedUser {

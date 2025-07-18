@@ -72,29 +72,52 @@ This will start:
 ### Available Scripts
 
 ```bash
-# Development
-npm run dev              # Start both frontend and backend
-npm run frontend:dev     # Start only frontend
-npm run backend:dev      # Start only backend
+# Development - Concurrent execution with automatic environment setup
+npm run dev                    # Start all services (shared, backend, frontend)
+npm run dev:frontend-only      # Start only frontend with env setup
+npm run dev:backend-only       # Start only backend with env setup
+npm run dev:frontend           # Start frontend only
+npm run dev:backend            # Start backend only
+npm run dev:shared             # Start shared package in watch mode
 
-# Building
-npm run build           # Build all packages
-npm run frontend:build  # Build frontend only
-npm run backend:build   # Build backend only
+# Building - Sequential builds with proper dependencies
+npm run build                  # Build all packages in correct order
+npm run build:prod             # Production build with NODE_ENV=production
+npm run build:frontend         # Build frontend only
+npm run build:backend          # Build backend only
+npm run build:shared           # Build shared package only
+
+# Production
+npm run start                  # Start both applications in production mode
+npm run start:frontend         # Start frontend in production mode
+npm run start:backend          # Start backend in production mode
 
 # Testing
-npm run test           # Run all tests
-npm run frontend:test  # Test frontend
-npm run backend:test   # Test backend
-
-# Database
-npm run backend:migration:generate  # Generate new migration
-npm run backend:migration:run      # Run pending migrations
-npm run backend:migration:revert   # Revert last migration
+npm run test                   # Run all tests across packages
+npm run test:watch             # Run tests in watch mode
+npm run test:ci                # Run tests for CI (with --if-present flag)
 
 # Code Quality
-npm run lint          # Lint all packages
-npm run format        # Format code with Prettier
+npm run lint                   # Lint and fix all packages
+npm run lint:check             # Lint without fixing
+npm run format                 # Format code with Prettier
+npm run format:check           # Check formatting without fixing
+npm run type-check             # Type check all packages
+npm run type-check:ci          # Type check for CI
+
+# Environment Management
+npm run env:setup              # Set up environment files from examples
+npm run env:copy               # Copy environment files (alias)
+
+# Database Operations
+npm run db:migrate             # Run database migrations
+npm run db:migrate:generate    # Generate new migration
+npm run db:migrate:revert      # Revert last migration
+
+# Maintenance
+npm run clean                  # Clean build artifacts from all packages
+npm run clean:all              # Clean everything including node_modules
+npm run install:all            # Fresh install with shared package build
 ```
 
 ### Package Management
